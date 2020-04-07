@@ -7,5 +7,4 @@ This game is written using pixi.js and tween.js
 2. Verify that you have a version node.js installed v12.16.1 and npm version 6.13.4 with the command: ```node -v``` и ```npm -v```
 3. Download the repository to the directory you need
 4. Installing the npm package to the folder with the command: ```npm i klondike```
-5. Installing the npm webpack server with the command:  ```npm install webpack-dev-server --save-dev```
-6. Start the application with the command: ```npm start```
+5. Start the application with the command: ```npm start```
