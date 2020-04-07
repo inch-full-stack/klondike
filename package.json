@@ -1,6 +1,6 @@
 {
   "name": "@inch-full-stack/klondike",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "npm guide for beginner",
   "main": "index.js",
   "scripts": {
@@ -32,6 +32,10 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/inch-full-stack/klondike"
-  }
+    "url": "git+https://github.com/inch-full-stack/klondike.git"
+  },
+  "bugs": {
+    "url": "https://github.com/inch-full-stack/klondike/issues"
+  },
+  "homepage": "https://github.com/inch-full-stack/klondike#readme"
 }

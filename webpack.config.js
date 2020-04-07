@@ -7,7 +7,7 @@ module.exports = {
     publicPath: '/' // public URL of the output directory when referenced in a browser
   },
   module: {  // where we defined file patterns and their loaders
-      rules: [ 
+      rules: [
       ]
   },
   plugins: [  // Array of plugins to apply to build chunk
@@ -17,7 +17,14 @@ module.exports = {
       })
   ],
   devServer: {  // configuration for webpack-dev-server
+      hot: true,
+      host: "localhost",
+      inline: true,
       contentBase: './src/public',  //source of static assets
       port: 7700, // port to run dev-server
-  } 
+      watchContentBase: true,
+      watchOptions: {
+        poll: true
+      }
+  }
 };

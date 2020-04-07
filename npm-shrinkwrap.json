@@ -1,6 +1,6 @@
 {
-  "name": "klondike",
-  "version": "1.0.0",
+  "name": "@inch-full-stack/klondike",
+  "version": "1.0.2",
   "lockfileVersion": 1,
   "requires": true,
   "dependencies": {
