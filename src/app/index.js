@@ -9,8 +9,6 @@ var gravity = 4;
 var figuresAmount = -1; //количество созданных фигур
 var figure = []; //массив хранящий нашу фигуру
 
-
-
 var model = {
     // ? Получение backround с помощью canvas
     createCanvas: function() {
@@ -28,95 +26,51 @@ var model = {
         // ctx.fillStyle = 'black';
         // ctx.fillRect(centerX - width / 2, centerY - height / 2, width, height);
         // Create the application
-        const app = new PIXI.Application({
-            width: 800, height: 600, backgroundColor: 0x1099bb, resolution: window.devicePixelRatio || 1,
-        });
-        document.body.appendChild(app.view);
-        
-        const container = new PIXI.Container();
-        
-        app.stage.addChild(container);
-        
-        // Create a new texture
-        const texture = PIXI.Texture.from('src/app/assets/img/game_scene_background.png');
-        
-        // Create a 5x5 grid of bunnies
-        for (let i = 0; i < 25; i++) {
-            const bunny = new PIXI.Sprite(texture);
-            bunny.anchor.set(0.5);
-            bunny.x = (i % 5) * 40;
-            bunny.y = Math.floor(i / 5) * 40;
-            container.addChild(bunny);
-        }
-        
-        // Move container to the center
-        container.x = app.screen.width / 2;
-        container.y = app.screen.height / 2;
-        
-        // Center bunny sprite in local container coordinates
-        container.pivot.x = container.width / 2;
-        container.pivot.y = container.height / 2;
-        
-        // Listen for animate update
-        app.ticker.add((delta) => {
-            // rotate the container!
-            // use delta to create frame-independent transform
-            container.rotation -= 0.01 * delta;
-        });
-        
-        // app = new PIXI.Application(900, 900); //создае холст
-        // document.body.appendChild(app.view); //выводим его в тело страницы
+
+        // document.body.appendChild(app.view);
+
+        // var windowWight = 1280;
+        // var windowHeight = 720;
+
+        // app.renderer.resize(windowWight, windowHeight);
+
+        // console.log(windowWight, " ", windowHeight);
+
+        // app.renderer.backgroundColor = 0x061639;
+
+
     },
-    // drawCircle: function() {
-    //     var rand = Math.floor(Math.random() * colors.length); //генерим рандомное число(в промежутке от 0 до количества цветов в массиве цветов)
-    //     var radius = 50; //радиус круга
-    //     var inAreaX = width - 100; //возможные координаты по оси X, которые может занимать круг, ширина страницы минус его диаметр
-    //     var circleY = -50; //круг должен создаваться за пределами холста
-    //     var circleX = Math.floor(Math.random() * inAreaX);
-    //     var circle = new PIXI.Graphics(); //создаем новый графический элемент
-    //     circle.lineStyle(0); //начинаем рисовать
-    //     circle.beginFill(colors[rand], 1); //задаем рандомный цвет
-    //     circle.drawCircle(circleX, circleY, radius); //рисуем кружок, ведь он наш дружок
-    //     circle.endFill(); //закончили отрисовку
-    //     circle.interactive = true; //делаем круг интерактивным
-    //     circle.buttonMode = true; //меняем курсор при наведении
-    //     circle.live = true; //указываем что наш шарик жив и не пал жертвой выстрела
-    //     figuresAmount++;
-    //     circle.num = figuresAmount; //даем нашему кругу порядковый номер
-    //     figure.push(circle); //обратиться на прямую к объекту circle мы не можем, поэтому отправляем его в массив
-    //     app.stage.addChild(circle); //выводим круг на холсте
-    //     circle.on('pointerdown', controller.clearFigure); //добавляем возможность при клике на фигуру удалить её
-    // },
-    // gameOver: function() {
-    //     var style = new PIXI.TextStyle({ //стили для текста
-    //         fill: '0xffffff',
-    //         fontSize: 36,
-    //     }); 
-    //     var gameOverText = new PIXI.Text('Game Over', style); //собственно выводимый текст
-    //     gameOverText.x = width / 2; //центрируем относительно экрана
-    //     gameOverText.y = height / 2; //центрируем относительно экрана
-    //     gameOverText.pivot.x = 50; //выравниваем по оси х
-    //     gameOverText.pivot.y = 50; // выравниваем по оси y
-    //     app.stage.addChild(gameOverText); //выводим на холсте
-    // }
+
+    LoadingNewImage: function(){
+        //Create the background Image
+        var app = new PIXI.Application({
+            width: 256,
+            height: 256,
+            antialiasing: true,
+            transparent: false,
+            resolution: 1
+          }
+        );
+        console.log("!");
+        const texture = PIXI.Texture.from('app/assets/img/game_scene_background.png');
+        console.log("texture", texture)
+        var cat = new PIXI.Sprite(texture);
+
+
+        cat.anchor.set(0.5);
+        cat.x = app.width;
+        cat.y = app.height;
+
+        console.log("cat", cat)
+        app.stage.addChild(cat);
+        console.log("app.stage", app.stage)
+
+    }
 }
 var view = {
     loadGame: function() {
         model.createCanvas();
-        // model.drawCircle();
-        
-        // setInterval(model.drawCircle, 500);
-
-        // app.ticker.add(function() { //постоянное обновление холста
-        //     for (var i = 0; i < figuresAmount; i++) {
-        //         figure[i].position.y += gravity; //заставляем гравитацию работать
-        //         if (figure[i].position.y > height && figure[i].live == true) {
-        //             model.gameOver();
-        //             return false;
-        //         }
-
-        //     }
-        // });
+        model.LoadingNewImage();
     }
 }
 
