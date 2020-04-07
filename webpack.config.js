@@ -20,7 +20,7 @@ module.exports = {
       hot: true,
       host: "localhost",
       inline: true,
-      contentBase: './src/public',  //source of static assets
+      contentBase: './src/app/assets',  //source of static assets
       port: 7700, // port to run dev-server
       watchContentBase: true,
       watchOptions: {
