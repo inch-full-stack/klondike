@@ -8,3 +8,4 @@ This game is written using pixi.js and tween.js
 3. Download the repository to the directory you need
 4. Installing the npm package to the folder with the command: ```npm i klondike```
 5. Start the application with the command: ```npm start```
+6. Run http://localhost:7700/
