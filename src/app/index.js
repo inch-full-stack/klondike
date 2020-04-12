@@ -2,6 +2,7 @@ const PIXI = require('pixi.js');
 window.PIXI = PIXI;
 const tweenManager = require('pixi-tween');
 require('pixi-layers');
+import gsap from 'gsap';
 import Sound from 'pixi-sound';
 
 var templateWidth = 1280;
@@ -119,18 +120,19 @@ function appResize(){
     _width = window.innerWidth / 1.012;
     _height = window.innerHeight / 1.05;
     app.renderer.resize(_width, _height);
-};
+}
 
 function loadAllImages(){
     loadBG();
     loadMilkman();
+    loadSmokeAndBarrelForHouse();
     loadGardenbed();
     loadCows();
-    loadRightPanel();
-    loadFinger();
     loadGreenButton();
     loadLogo();
-};
+    loadRightPanel();
+    loadFinger();
+}
 
 function loadGardenbed(){
     let textureForGardenbed = PIXI.Texture.from('app/assets/raw/gardenbed.png');
@@ -168,11 +170,14 @@ function loadGardenbed(){
         containerForGardenbed.addChild(buffItems2[i]);
     }
 
-    containerForGardenbed.x = app.renderer.width / 2.7;
-    containerForGardenbed.y = app.renderer.height / 1.1;
+    containerForGardenbed.x = myBG.x - 170 * (app.renderer.height / templateHeight);
+    containerForGardenbed.y = myBG.y + 220 * (app.renderer.height / templateHeight);
+
+    containerForGardenbed.scale.x = (app.renderer.height / templateHeight);
+    containerForGardenbed.scale.y = (app.renderer.height / templateHeight);
 
     app.stage.addChild(containerForGardenbed);
-};
+}
 
 function loadCows(){
     let textureForCowAll = new PIXI.Texture.from("app/assets/animations/cows.png");
@@ -215,16 +220,18 @@ function loadCows(){
         cowShadow.x = (startPosX + 5) - (i * 70);
         cowShadow.y = (startPosY + 20) + (i * 70);
 
-
         containerForCow.addChild(cowShadow);
         containerForCow.addChild(cow);
 
-        containerForCow.x = app.renderer.width / 1.6;
-        containerForCow.y = app.renderer.height / 1.6;
+        containerForCow.x = myBG.x + 180 * (app.renderer.height / templateHeight);
+        containerForCow.y = myBG.y + 85 * (app.renderer.height / templateHeight);
+
+        containerForCow.scale.x = (app.renderer.height / templateHeight);
+        containerForCow.scale.y = (app.renderer.height / templateHeight);
 
         app.stage.addChild(containerForCow);
     }
-};
+}
 
 function loadSmokeAndBarrelForHouse(){
     let textureForBarrelAll = new PIXI.Texture.from("app/assets/animations/barrel.png");
@@ -252,18 +259,29 @@ function loadSmokeAndBarrelForHouse(){
     barrelForHouse.anchor.set(0.5);
     smokeForHouse.anchor.set(0.5);
 
-    barrelForHouse.x = conteinerForMilkman.x + 5;
-    barrelForHouse.y = conteinerForMilkman.y + 32;
+    barrelForHouse.x = conteinerForMilkman.x + 5 * (app.renderer.height / templateHeight);
+    barrelForHouse.y = conteinerForMilkman.y + 32 * (app.renderer.height / templateHeight);
 
-    smokeForHouse.x = conteinerForMilkman.x + 21;
-    smokeForHouse.y = conteinerForMilkman.y - 143;
+    barrelForHouse.scale.x *= (app.renderer.height / templateHeight);
+    barrelForHouse.scale.y *= (app.renderer.height / templateHeight);
+
+    smokeForHouse.x = conteinerForMilkman.x + 21 * (app.renderer.height / templateHeight);
+    smokeForHouse.y = conteinerForMilkman.y - 143 * (app.renderer.height / templateHeight);
+
+    smokeForHouse.scale.x *= (app.renderer.height / templateHeight);
+    smokeForHouse.scale.y *= (app.renderer.height / templateHeight);
 
     app.stage.addChild(barrelForHouse);
     app.stage.addChild(smokeForHouse);
-};
+
+    barrelForHouse.visible = false;
+    smokeForHouse.visible = false;
+}
 
 // ? анимация бочки
 function startChangingBarrelSpriteAnim(item, max, time, startTexture){
+    barrelForHouse.visible = true;
+
     let tweenChangingBarrelAnim = PIXI.tweenManager.createTween(item);
     tweenChangingBarrelAnim.time = time;
     tweenChangingBarrelAnim.repeat = max;
@@ -274,10 +292,12 @@ function startChangingBarrelSpriteAnim(item, max, time, startTexture){
         item.texture = startTexture[0];
     });
     tweenChangingBarrelAnim.start();
-};
+}
 
 // ? анимация дыма на домике
 function startChangingSmokeSpriteAnim(item, max, time, startTexture){
+    smokeForHouse.visible = true;
+
     let tweenChangingSmokeAnim = PIXI.tweenManager.createTween(item);
     tweenChangingSmokeAnim.time = time;
     tweenChangingSmokeAnim.repeat = max;
@@ -289,7 +309,7 @@ function startChangingSmokeSpriteAnim(item, max, time, startTexture){
         loadDarkBGForEndWindow();
     });
     tweenChangingSmokeAnim.start();
-};
+}
 
 // ? запуск анимации для коров с определенным промежутком времени
 function startCowAnim(item, max, time){
@@ -300,7 +320,7 @@ function startCowAnim(item, max, time){
         startChangingCowSpriteAnim(item.getChildAt(item.children.length - loopCount * 2 + 1), textureForCows.length - 2, 300);
     });
     tweenCowAnim.start();
-};
+}
 
 // ? анимация одной коровы
 function startChangingCowSpriteAnim(item, max, time){
@@ -314,7 +334,7 @@ function startChangingCowSpriteAnim(item, max, time){
         item.texture = textureForCows[0];
     });
     tweenChangingCowAnim.start();
-};
+}
 
 // ? создание спрайта "неверного выбора"
 function loadCanselAction(posX, posY){
@@ -328,6 +348,9 @@ function loadCanselAction(posX, posY){
     canselActionEllipse.anchor.set(0.5);
     canselActionX.anchor.set(0.5);
 
+    canselActionX.scale.x *= (app.renderer.height / templateHeight);
+    canselActionX.scale.y *= (app.renderer.height / templateHeight);
+
     containerForCanselAction.addChild(canselActionEllipse);
     containerForCanselAction.addChild(canselActionX);
 
@@ -338,7 +361,7 @@ function loadCanselAction(posX, posY){
     containerForCanselAction.y = posY;
 
     return containerForCanselAction;
-};
+}
 
 // ? загрузка спрайта заднего фона
 function loadBG(){
@@ -348,13 +371,13 @@ function loadBG(){
     myBG.anchor.set(0.5);
 
     myBG.x = app.renderer.width / 2;
-    myBG.y = app.renderer.height / 1.6;
+    myBG.y = app.renderer.height / 2;
 
-    myBG.width = app.renderer.width;
+    myBG.width = (app.renderer.height / templateHeight) * app.renderer.width;
     myBG.height = app.renderer.height * 3.5;
 
     app.stage.addChild(myBG);
-};
+}
 
 // ? загрузка спрайта логотипа
 function loadLogo(){
@@ -366,8 +389,11 @@ function loadLogo(){
     myLogo.x = app.renderer.width / 6;
     myLogo.y = app.renderer.height / 8;
 
+    myLogo.scale.x *= (app.renderer.height / templateHeight);
+    myLogo.scale.y *= (app.renderer.height / templateHeight);
+
     app.stage.addChild(myLogo);
-};
+}
 
 // ? загрузка спрайта домика
 function loadMilkman(){
@@ -381,11 +407,14 @@ function loadMilkman(){
     conteinerForMilkman.pivot.x = conteinerForMilkman.width / 2;
     conteinerForMilkman.pivot.y = conteinerForMilkman.height / 2;
 
-    conteinerForMilkman.x = app.renderer.width / 2.15;
-    conteinerForMilkman.y = app.renderer.height / 2.9;
+    conteinerForMilkman.x = myBG.x - 90 * (app.renderer.height / templateHeight);
+    conteinerForMilkman.y = myBG.y - 150 * (app.renderer.height / templateHeight);
+
+    conteinerForMilkman.scale.x = (app.renderer.height / templateHeight);
+    conteinerForMilkman.scale.y = (app.renderer.height / templateHeight);
 
     app.stage.addChild(conteinerForMilkman);
-};
+}
 
 // ? загрузка спрайта боковой панели и ее элементов
 function loadRightPanel(){
@@ -435,7 +464,7 @@ function loadRightPanel(){
     for(let i = 0; i < 3; i++){
         let graphics = new PIXI.Graphics();
         graphics.beginFill(0xDE3249);
-        graphics.drawRect(itemActive[i].x, itemActive[i].y, 150, 150);
+        graphics.drawRect(itemActive[i].x, itemActive[i].y, 150 , 150);
         graphics.endFill();
         maskOfActiveItems.push(graphics);
     }
@@ -447,8 +476,11 @@ function loadRightPanel(){
     itemsBG.x = app.renderer.width / 1.1;
     itemsBG.y = app.renderer.height / 1.9;
 
-    itemsBG.width = app.renderer.width / 8;
-    itemsBG.height = app.renderer.height * 1;
+    itemsBG.width = (app.renderer.width / 8) * (app.renderer.height / templateHeight);
+    itemsBG.height = app.renderer.height / 1.15;
+
+    itemsBG.scale.x *= (app.renderer.height / templateHeight);
+    itemsBG.scale.y *= (app.renderer.height / templateHeight);
 
     for(let i = 0; i < itemActive.length; i++){
         itemInactive[i].anchor.set(0.5);
@@ -485,7 +517,28 @@ function loadRightPanel(){
         usedTool[i].y = positionY;
 
         maskOfActiveItems[i].x = positionX;
-        maskOfActiveItems[i].y = positionY + maskOfActiveItems[i].width / 2;
+        maskOfActiveItems[i].y = positionY + maskOfActiveItems[i].width / 2 * (app.renderer.height / templateHeight);
+
+        itemInactive[i].scale.x *= (app.renderer.height / templateHeight);
+        itemInactive[i].scale.y *= (app.renderer.height / templateHeight);
+
+        itemActive[i].scale.x *= (app.renderer.height / templateHeight);
+        itemActive[i].scale.y *= (app.renderer.height / templateHeight);
+
+        questionMarks[i].scale.x *= (app.renderer.height / templateHeight);
+        questionMarks[i].scale.y *= (app.renderer.height / templateHeight);
+
+        questionMarksAllow[i].scale.x *= (app.renderer.height / templateHeight);
+        questionMarksAllow[i].scale.y *= (app.renderer.height / templateHeight);
+
+        itemsForUse[i].scale.x *= (app.renderer.height / templateHeight);
+        itemsForUse[i].scale.y *= (app.renderer.height / templateHeight);
+
+        usedTool[i].scale.x *= (app.renderer.height / templateHeight);
+        usedTool[i].scale.y *= (app.renderer.height / templateHeight);
+
+        maskOfActiveItems[i].scale.x *= (app.renderer.height / templateHeight);
+        maskOfActiveItems[i].scale.y *= (app.renderer.height / templateHeight);
     }
 
     app.stage.addChild(itemsBG);
@@ -509,7 +562,7 @@ function loadRightPanel(){
     for (let i = 0; i < itemActive.length; i++) {
         app.stage.addChild(itemsForUse[i]);
     }
-};
+}
 
 // ? анимация загрузки появившихся элементов боковой панели
 function startOpeningNewItem(item, time){
@@ -519,7 +572,7 @@ function startOpeningNewItem(item, time){
     tweenGraphicAnim.repeat = 0;
 
     tweenGraphicAnim.start();
-};
+}
 
 // ? загрузка зеленой кнопки с текстом
 function loadGreenButton(){
@@ -545,8 +598,11 @@ function loadGreenButton(){
 
     conteinerGreenButtonWithText.addChild(richText);
 
+    conteinerGreenButtonWithText.scale.x *= (app.renderer.height / templateHeight);
+    conteinerGreenButtonWithText.scale.y *= (app.renderer.height / templateHeight);
+
     app.stage.addChild(conteinerGreenButtonWithText);
-};
+}
 
 // ? загрузка пальца
 function loadFinger(){
@@ -555,14 +611,17 @@ function loadFinger(){
     finger = new PIXI.Sprite(textureForFinger);
     finger.anchor.set(0.2);
 
+    finger.scale.x *= (app.renderer.height / templateHeight);
+    finger.scale.y *= (app.renderer.height / templateHeight);
+
     app.stage.addChild(finger);
-};
+}
 
 // ? загрузка черного заднего фона для финального окна
 function loadDarkBGForEndWindow(){
     let graphic = new PIXI.Graphics()
         .beginFill(0x000000, 0.8)
-        .drawRect(0, 0, app.renderer.width, app.renderer.width)
+        .drawRect(0, 0, app.renderer.width, app.renderer.height)
         .endFill();
 
     let texture = app.renderer.generateTexture(graphic, PIXI.SCALE_MODES.NEAREST, 1, graphic);
@@ -571,7 +630,7 @@ function loadDarkBGForEndWindow(){
     app.stage.addChild(blackBG);
 
     startEndWindowAnimAlpha(blackBG, 0, 1, 500);
-};
+}
 
 // ? загрузка спрайтов для финального окна
 function loadEndWindow(){
@@ -591,7 +650,7 @@ function loadEndWindow(){
     SuccessBG.height = templateHeight / 2;
 
     startEnding();
-};
+}
 
 // ? определение поведения мыши
 function workWithItemsForUse(item){
@@ -602,7 +661,7 @@ function workWithItemsForUse(item){
             .on('pointerupoutside', onDragEnd)
             .on('pointermove', onDragMove);
     }
-};
+}
 
 // ? настройка элементов боковой панели относительно functionState
 function logicOfMovementItems(item){
@@ -623,7 +682,7 @@ function logicOfMovementItems(item){
             }
         }
     }
-};
+}
 
 // ? действие при нажатии мыши
 function onDragStart(event) {
@@ -632,7 +691,7 @@ function onDragStart(event) {
     this.dragging = true;
     spawnX = this.x;
     spawnY = this.y;
-};
+}
 
 // ? действие, когда отпускаешь мышь
 function onDragEnd() {
@@ -661,7 +720,7 @@ function onDragEnd() {
         this.x = spawnX;
         this.y = spawnY;
     }
-};
+}
 
 // ? действие при движении мыши
 function onDragMove() {
@@ -672,7 +731,7 @@ function onDragMove() {
         lastPosX = newPosition.x;
         lastPosY = newPosition.y;
     }
-};
+}
 
 function trueVerOfStateLogic(){
     itemsForUse[functionState].visible = false;
@@ -687,18 +746,18 @@ function trueVerOfStateLogic(){
         startCowAnim(containerForCow, containerForCow.children.length / 2, 200);
     } else if (functionState == 2) {
         // TODO запуск анимации домика(дым, бочка)
-        loadSmokeAndBarrelForHouse();
         startChangingBarrelSpriteAnim(barrelForHouse, textureForBarrels.length - 2, 300, textureForBarrels);
-        startChangingSmokeSpriteAnim(smokeForHouse, textureForSmokes.length - 2, 300, textureForSmokes);;
+        startChangingSmokeSpriteAnim(smokeForHouse, textureForSmokes.length - 2, 300, textureForSmokes);
     }
 
     functionState++;
-};
+}
 
 // ? анимация "неверного выбора"
 function startCanselScaleAnim(item, startScale, finishScale, time, state) {
     let tweenCanselAnim = PIXI.tweenManager.createTween(item);
-    tweenCanselAnim.from({ scale : {x: startScale, y: startScale } }).to({ scale : {x: finishScale, y: finishScale } })
+    tweenCanselAnim.from({ scale : {x: startScale * (app.renderer.height / templateHeight), y: startScale * (app.renderer.height / templateHeight)} })
+                    .to({ scale : {x: finishScale * (app.renderer.height / templateHeight), y: finishScale * (app.renderer.height / templateHeight)} })
     tweenCanselAnim.time = time;
     tweenCanselAnim.repeat = 0;
     tweenCanselAnim.on('start', () => {
@@ -710,7 +769,7 @@ function startCanselScaleAnim(item, startScale, finishScale, time, state) {
         }
     });
     tweenCanselAnim.start();
-};
+}
 
 // ? дополнительная анимация "неверного выбора"
 function startWaitingAnimForCansel(item, time, max){
@@ -721,7 +780,7 @@ function startWaitingAnimForCansel(item, time, max){
         startCanselScaleAnim(item, 1, 0, 500, 'end');
     });
     tweenCanselWait.start();
-};
+}
 
 // ? добавление текста для финального окна
 function loadEndText(){
@@ -732,14 +791,14 @@ function loadEndText(){
     endTextSecond.anchor.set(0.5);
 
     endTextFirst.x = 0;
-    endTextFirst.y = -app.renderer.height / 4;
+    endTextFirst.y = -SuccessBG.height / 3.5;
 
     endTextSecond.x = 0;
-    endTextSecond.y = app.renderer.height / 6;
+    endTextSecond.y = SuccessBG.height / 4.5;
 
     app.stage.addChild(endTextFirst);
     app.stage.addChild(endTextSecond);
-};
+}
 
 // ? анимация черного заднего фона для финального окна
 function startEndWindowAnimAlpha(item, alphaStart, alphaEnd, time) {
@@ -755,20 +814,20 @@ function startEndWindowAnimAlpha(item, alphaStart, alphaEnd, time) {
     });
 
     tweenEndWindowAnim.start();
-};
+}
 
 // ? настройка финального окна
 function startEnding(){
     resourcesFromItems[2].visible = true;
 
     conteinerGreenButtonWithText.x = 0;
-    conteinerGreenButtonWithText.y = app.renderer.height / 3.0;
+    conteinerGreenButtonWithText.y = SuccessBG.height / 2.4;
 
     resourcesFromItems[2].x = 0;
-    resourcesFromItems[2].y = -app.renderer.height / 16; // не баг, а фича :)
+    resourcesFromItems[2].y = -SuccessBG.height / 28;
 
     myLogo.x = 0;
-    myLogo.y = -app.renderer.height / 2.5; // не баг, а фича :)
+    myLogo.y = -SuccessBG.height / 2.2
 
     myLogo.scale.x = 0.65;
     myLogo.scale.y = 0.65;
@@ -795,17 +854,17 @@ function startEnding(){
     app.stage.addChild(containerForEndWindow);
 
     startEndWindowAnim(containerForEndWindow, 0, 1, 1000);
-};
+}
 
 // ? анимация финального окна
 function startEndWindowAnim(item, startScale, finishScale, time) {
     let tweenEndWindowAnim = PIXI.tweenManager.createTween(item);
-    tweenEndWindowAnim.from({ scale : {x: startScale, y: startScale } }).to({ scale : {x: finishScale, y: finishScale } })
+    tweenEndWindowAnim.from({ scale : {x: startScale, y: startScale } }).to({ scale : { x: finishScale, y: finishScale } })
     tweenEndWindowAnim.time = time;
     tweenEndWindowAnim.repeat = 0;
 
     tweenEndWindowAnim.start();
-};
+}
 
 function startWaitingAnimForUseItems(time, parent, functionState, secondFinX, secondFinY){
     let tweenItemWait = PIXI.tweenManager.createTween();
@@ -818,12 +877,12 @@ function startWaitingAnimForUseItems(time, parent, functionState, secondFinX, se
         let childrenPosY = parent.getChildAt(indexOfChild * 2).y / 2  + parent.y;
         startResourceInterpolation(changeWheatToResource(indexOfChild, functionState, parent),
                                     parent, indexOfChild,
-                                    childrenPosX, childrenPosY, childrenPosX, childrenPosY - 70,
+                                    childrenPosX, childrenPosY, childrenPosX, childrenPosY - 70 * (app.renderer.height / templateHeight),
                                     secondFinX, secondFinY, 500, 'start');
     });
 
     tweenItemWait.start();
-};
+}
 
 // ? создание предметов для анимации переноса
 function changeWheatToResource(indexOfChild, indexOfResource, parent) {
@@ -836,6 +895,9 @@ function changeWheatToResource(indexOfChild, indexOfResource, parent) {
 
     buff.x = parent.getChildAt(indexOfChild * 2 + 1).x;
     buff.y = parent.getChildAt(indexOfChild * 2 + 1).y;
+
+    buff.scale.x *= (app.renderer.height / templateHeight);
+    buff.scale.y *= (app.renderer.height / templateHeight);
 
     containerForGardenbed.getChildAt(indexOfChild * 2 + 1).visible = false;
 
@@ -869,19 +931,19 @@ function startResourceInterpolation(item, parent, indexOfChild, startX, startY, 
         }
     });
     tweenResourceWait.start();
-};
+}
 
 // ? анимация прилетающих элементов к боковой панели
 function startItemScaleAnim(item, startScale, finishScale, time) {
     let tweenItemAnim = PIXI.tweenManager.createTween(item);
-    tweenItemAnim.from({ scale : {x: startScale, y: startScale } }).to({ scale : {x: finishScale, y: finishScale } })
+    tweenItemAnim.from({ scale : {x: startScale * (app.renderer.height / templateHeight), y: startScale * (app.renderer.height / templateHeight) } }).to({ scale : {x: finishScale * (app.renderer.height / templateHeight), y: finishScale * (app.renderer.height / templateHeight) } })
     tweenItemAnim.time = time;
     tweenItemAnim.repeat = 0;
     tweenItemAnim.on('end', () => {
         item.visible = true;
     });
     tweenItemAnim.start();
-};
+}
 
 // ? фунция перерассчета времени для анимации пальца
 function findTimeOfAnimationForFinger(){
@@ -889,7 +951,7 @@ function findTimeOfAnimationForFinger(){
     let distanceForFinger = Math.sqrt(Math.pow(itemActive[functionState].x - massOfActionSpace[functionState].x, 2) + Math.pow(itemActive[functionState].y - massOfActionSpace[functionState].y, 2));
     let speedOfFinger = teplateDistanceForFinger / 2000;
     timeOfAnimationForFinger = distanceForFinger / speedOfFinger;
-};
+}
 
 // ? анимация переноса пальца
 function startAnimationForFinger(item, startX, startY, finishX, finishY, time){
@@ -901,7 +963,7 @@ function startAnimationForFinger(item, startX, startY, finishX, finishY, time){
         changeAlphaChannel(item, 1, 0, 500, 'end', tweenFinger);
     });
     changeAlphaChannel(item, 0, 1, 500, 'start', tweenFinger);
-};
+}
 
 // ? анимация изменения прозрачности пальца (начало, конец)
 function changeAlphaChannel(item, alphaStart, alphaEnd, time, state, startAnim){
@@ -923,7 +985,7 @@ function changeAlphaChannel(item, alphaStart, alphaEnd, time, state, startAnim){
         }
     });
     tweenFingerAnim.start();
-};
+}
 
 // ? тайминг анимации пальца
 function startWaitingAnimForFinger(item, time, max){
@@ -944,28 +1006,33 @@ function startWaitingAnimForFinger(item, time, max){
         }
     });
     tweenFingerWait.start();
-};
+}
 
 // ? анимация зеленой кнопки
 function startGreenButtonAnim(item, startScale, finishScale, time, i) {
-    let tweenGreenButtonAnim = PIXI.tweenManager.createTween(item);
-    tweenGreenButtonAnim.from({ scale : {x: startScale, y: startScale } }).to({ scale : {x: finishScale, y: finishScale } })
-    tweenGreenButtonAnim.time = time;
-    tweenGreenButtonAnim.repeat = 0;
-    tweenGreenButtonAnim.on('end', () => {
-        if (i != 100) {
-            startGreenButtonAnim(item, finishScale, startScale, time, ++i);
-        }
+    // вариант анимации через gsap
+    gsap.to(item.scale, {
+        x: finishScale * (app.renderer.height / templateHeight), y: finishScale * (app.renderer.height / templateHeight), duration: time / 1000, repeat: -1, yoyo: true,
     });
-    tweenGreenButtonAnim.start();
-};
+    // вариант анимации через pixi-tween
+    // let tweenGreenButtonAnim = PIXI.tweenManager.createTween(item);
+    // tweenGreenButtonAnim.from({ scale : {x: startScale * (app.renderer.height / templateHeight), y: startScale * (app.renderer.height / templateHeight) } }).to({ scale : {x: finishScale * (app.renderer.height / templateHeight), y: finishScale * (app.renderer.height / templateHeight) } })
+    // tweenGreenButtonAnim.time = time;
+    // tweenGreenButtonAnim.repeat = 0;
+    // tweenGreenButtonAnim.on('end', () => {
+    //     if (i != 100) {
+    //         startGreenButtonAnim(item, finishScale, startScale, time, ++i);
+    //     }
+    // });
+    // tweenGreenButtonAnim.start();
+}
 
 // ? запуск тикера
 function startFunction(){
     ticker.add(appResize);
     ticker.add(logicFunc);
     ticker.start();
-};
+}
 
 // ? контроль состояния
 function logicFunc(){
@@ -979,7 +1046,7 @@ function logicFunc(){
             lastFunctionState = functionState;
         }
     }
-};
+}
 
 var view = {
     loadGame: function() {
@@ -995,6 +1062,12 @@ var view = {
         //startAnimationForFinger(finger, itemActive[functionState].x, itemActive[functionState].y, massOfActionSpace[functionState].x, massOfActionSpace[functionState].y, timeOfAnimationForFinger, 0);
     }
 };
+
+app.ticker.stop();
+
+gsap.ticker.add(() => {
+    app.ticker.update();
+});
 
 app.ticker.add(function() {
     PIXI.tweenManager.update();
