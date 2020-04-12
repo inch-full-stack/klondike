@@ -3,6 +3,11 @@
   "version": "1.0.4",
   "description": "npm guide for beginner",
   "main": "index.js",
+  "eslint.enable": true,
+  "eslint.autoFixOnSave": true,
+  "eslint.options": {
+    "configFile": ".eslintrc.json"
+  },
   "scripts": {
     "start:dev": "webpack-dev-server",
     "start": "webpack-dev-server --history-api-fallback --inline --progress"
@@ -17,6 +22,7 @@
     "createjs": "^1.0.1",
     "createjs-module": "^0.8.3",
     "express": "^4.17.1",
+    "gsap": "^3.2.6",
     "lodash": "^4.17.15",
     "pixi-layers": "^0.2.3",
     "pixi-sound": "^3.0.4",
@@ -28,6 +34,7 @@
   },
   "devDependencies": {
     "css-loader": "^3.4.2",
+    "eslint": "^6.8.0",
     "html-webpack-plugin": "^4.0.4",
     "node-sass": "^4.13.1",
     "sass-loader": "^8.0.2",
