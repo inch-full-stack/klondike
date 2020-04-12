@@ -1712,6 +1712,16 @@
         "sha.js": "^2.4.8"
       }
     },
+    "createjs": {
+      "version": "1.0.1",
+      "resolved": "https://registry.npmjs.org/createjs/-/createjs-1.0.1.tgz",
+      "integrity": "sha512-VutFczgM8GNzOSiFKlYEwFRgZRMQkZt34ooaewKi7lzxuQ7JSsUs/Y1qb95G4CKOnHA/C/yghCJ6wfivuKOawA=="
+    },
+    "createjs-module": {
+      "version": "0.8.3",
+      "resolved": "https://registry.npmjs.org/createjs-module/-/createjs-module-0.8.3.tgz",
+      "integrity": "sha1-Mo/6LhR0HXMD09CL2XzhgjNldB8="
+    },
     "cross-spawn": {
       "version": "6.0.5",
       "resolved": "https://registry.npmjs.org/cross-spawn/-/cross-spawn-6.0.5.tgz",
@@ -5314,6 +5324,22 @@
       "version": "0.2.3",
       "resolved": "https://registry.npmjs.org/pixi-layers/-/pixi-layers-0.2.3.tgz",
       "integrity": "sha512-alf52hWgJ5P95TMUMgLdG4ul/wpqQ1J2MMBYT9/d263FQRSSP4Apgq4bDGKvpXRND2HkboQ1ISGDRAkMwOJLIw=="
+    },
+    "pixi-sound": {
+      "version": "3.0.4",
+      "resolved": "https://registry.npmjs.org/pixi-sound/-/pixi-sound-3.0.4.tgz",
+      "integrity": "sha512-e+BteT7KYAEs6SAAuqOFlXEarzMNzsVj6y14ecjQ7W7YzjgxQOUVgYFp6rJrDyEmDeSGvWDIR5x7bRMQZGRpzw==",
+      "requires": {
+        "@pixi/core": "^5.0.2",
+        "@pixi/loaders": "^5.0.2",
+        "@pixi/ticker": "^5.0.1",
+        "@pixi/utils": "^5.0.1"
+      }
+    },
+    "pixi-tween": {
+      "version": "0.2.0",
+      "resolved": "https://registry.npmjs.org/pixi-tween/-/pixi-tween-0.2.0.tgz",
+      "integrity": "sha1-kLqSloPSf3/IyJtRGDoTB6kcdL0="
     },
     "pixi.js": {
       "version": "5.2.1",
