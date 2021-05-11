@@ -23,7 +23,7 @@
     "createjs-module": "^0.8.3",
     "express": "^4.17.1",
     "gsap": "^3.2.6",
-    "lodash": "^4.17.15",
+    "lodash": "^4.17.21",
     "pixi-layers": "^0.2.3",
     "pixi-sound": "^3.0.4",
     "pixi-tween": "^0.2.0",
