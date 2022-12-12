@@ -21,7 +21,7 @@
     "@tweenjs/tween.js": "^18.5.0",
     "createjs": "^1.0.1",
     "createjs-module": "^0.8.3",
-    "express": "^4.17.1",
+    "express": "^4.17.3",
     "gsap": "^3.2.6",
     "lodash": "^4.17.15",
     "pixi-layers": "^0.2.3",
